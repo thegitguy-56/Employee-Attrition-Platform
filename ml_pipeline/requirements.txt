@@ -4,25 +4,25 @@
 # running scripts inside the ml_pipeline/ folder.
 
 # pandas reads and manipulates your CSV dataset
-pandas==2.2.2
+pandas==2.2.3
 
 # numpy provides math/array operations
-numpy==1.26.4
+numpy==2.2.6
 
 # scikit-learn gives you all 3 ML algorithms + evaluation tools
-scikit-learn==1.4.2
+scikit-learn==1.7.0
 
 # joblib saves your trained model to a .pkl file
 joblib==1.4.2
 
 # matplotlib draws plots (feature importance charts, etc.)
-matplotlib==3.9.0
+matplotlib==3.10.3
 
 # seaborn makes prettier statistical charts
 seaborn==0.13.2
 
 # imbalanced-learn handles class imbalance (more "No" than "Yes" in attrition)
-imbalanced-learn==0.12.3
+imbalanced-learn==0.14.0
 
 # python-dotenv reads .env files
 python-dotenv==1.0.1

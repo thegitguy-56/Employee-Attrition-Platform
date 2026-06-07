@@ -7,13 +7,13 @@ uvicorn[standard]==0.29.0
 
 # === DATABASE ===
 # SQLAlchemy lets Python talk to your PostgreSQL database
-sqlalchemy==2.0.30
+sqlalchemy==2.0.41
 
 # asyncpg is the driver that connects SQLAlchemy to PostgreSQL
-asyncpg==0.29.0
+asyncpg==0.30.0
 
 # psycopg2 is a synchronous PostgreSQL driver (needed for some tools)
-psycopg2-binary==2.9.9
+psycopg2-binary==2.9.10
 
 # Alembic handles database "migrations" — changes to your DB schema over time
 alembic==1.13.1
@@ -30,23 +30,23 @@ python-multipart==0.0.9
 
 # === DATA VALIDATION ===
 # Pydantic validates incoming and outgoing JSON data
-pydantic==2.7.1
+pydantic==2.11.7
 
 # pydantic-settings loads variables from your .env file
-pydantic-settings==2.2.1
+pydantic-settings==2.10.1
 
 # email-validator checks that email addresses are correctly formatted
 email-validator==2.1.1
 
 # === MACHINE LEARNING ===
 # scikit-learn provides Logistic Regression, Decision Tree, Random Forest
-scikit-learn==1.4.2
+scikit-learn==1.7.0
 
 # pandas handles tabular data (like your CSV dataset)
-pandas==2.2.2
+pandas==2.2.3
 
 # numpy provides math operations used by ML models
-numpy==1.26.4
+numpy==2.2.6
 
 # joblib saves (serializes) your trained ML models to .pkl files
 joblib==1.4.2
