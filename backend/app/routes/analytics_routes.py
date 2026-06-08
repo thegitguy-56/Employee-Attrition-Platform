@@ -16,10 +16,24 @@ def overview(db: Session = Depends(get_db), _: User = Depends(get_current_user))
     """Total employees, high-risk count, avg risk score, predictions today."""
     total_employees = db.query(Employee).filter(Employee.is_active == True).count()
 
-    # High-risk = last prediction per employee with risk_score >= 0.7
+    # High-risk = predictions with risk_score >= 0.7
     high_risk = (
         db.query(Prediction)
         .filter(Prediction.risk_score >= 0.7, Prediction.is_batch == False)
+        .count()
+    )
+
+    # Medium-risk = predictions with 0.4 <= risk_score < 0.7
+    medium_risk = (
+        db.query(Prediction)
+        .filter(Prediction.risk_score >= 0.4, Prediction.risk_score < 0.7, Prediction.is_batch == False)
+        .count()
+    )
+
+    # Low-risk = predictions with risk_score < 0.4
+    low_risk = (
+        db.query(Prediction)
+        .filter(Prediction.risk_score < 0.4, Prediction.is_batch == False)
         .count()
     )
 
@@ -36,6 +50,9 @@ def overview(db: Session = Depends(get_db), _: User = Depends(get_current_user))
     return {
         "total_employees":    total_employees,
         "high_risk_count":    high_risk,
+        "high_risk":          high_risk,
+        "medium_risk":        medium_risk,
+        "low_risk":           low_risk,
         "average_risk_score": avg_risk,
         "predictions_today":  today_count,
     }

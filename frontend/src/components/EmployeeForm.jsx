@@ -34,9 +34,44 @@ const BLANK = {
   distance_from_home: '',
 };
 
+// Reusable input wrapper (moved outside components to prevent focus loss)
+const Field = ({ label, name, value, onChange, type = 'text', ...rest }) => (
+  <div>
+    <label className="block text-xs font-medium text-slate-600 mb-1">{label}</label>
+    <input
+      name={name}
+      type={type}
+      value={value}
+      onChange={onChange}
+      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      {...rest}
+    />
+  </div>
+);
+
+const Select = ({ label, name, value, onChange, options }) => (
+  <div>
+    <label className="block text-xs font-medium text-slate-600 mb-1">{label}</label>
+    <select
+      name={name}
+      value={value}
+      onChange={onChange}
+      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      {options.map((o) => (
+        <option key={o} value={o}>{o}</option>
+      ))}
+    </select>
+  </div>
+);
+
 export default function EmployeeForm({ employee = null, onClose, onSaved }) {
-  // If editing, pre-fill form with existing data; otherwise use blank
-  const [form, setForm]     = useState(employee ?? BLANK);
+  // If editing, pre-fill form with existing data and parse overtime string to boolean
+  const [form, setForm]     = useState(
+    employee 
+      ? { ...employee, overtime: employee.overtime === 'Yes' } 
+      : BLANK
+  );
   const [loading, setLoading] = useState(false);
 
   const isEdit = !!employee;
@@ -54,7 +89,7 @@ export default function EmployeeForm({ employee = null, onClose, onSaved }) {
     e.preventDefault();
     setLoading(true);
     try {
-      // Convert number strings to actual numbers
+      // Convert number strings to actual numbers and boolean overtime to 'Yes'/'No'
       const payload = {
         ...form,
         age:               Number(form.age),
@@ -65,6 +100,7 @@ export default function EmployeeForm({ employee = null, onClose, onSaved }) {
         work_life_balance:  Number(form.work_life_balance),
         job_satisfaction:   Number(form.job_satisfaction),
         education:          Number(form.education),
+        overtime:           form.overtime ? 'Yes' : 'No',
       };
 
       if (isEdit) {
@@ -77,42 +113,21 @@ export default function EmployeeForm({ employee = null, onClose, onSaved }) {
       onSaved(); // Tell parent to refresh the list
       onClose(); // Close the modal
     } catch (err) {
-      toast.error(err.response?.data?.detail ?? 'Failed to save employee');
+      let msg = 'Failed to save employee';
+      if (err.response?.data?.detail) {
+        if (Array.isArray(err.response.data.detail)) {
+          msg = err.response.data.detail.map(e => `${e.loc.join('.')}: ${e.msg}`).join(', ');
+        } else if (typeof err.response.data.detail === 'string') {
+          msg = err.response.data.detail;
+        } else {
+          msg = JSON.stringify(err.response.data.detail);
+        }
+      }
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
   };
-
-  // Reusable input wrapper
-  const Field = ({ label, name, type = 'text', ...rest }) => (
-    <div>
-      <label className="block text-xs font-medium text-slate-600 mb-1">{label}</label>
-      <input
-        name={name}
-        type={type}
-        value={form[name]}
-        onChange={handleChange}
-        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        {...rest}
-      />
-    </div>
-  );
-
-  const Select = ({ label, name, options }) => (
-    <div>
-      <label className="block text-xs font-medium text-slate-600 mb-1">{label}</label>
-      <select
-        name={name}
-        value={form[name]}
-        onChange={handleChange}
-        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        {options.map((o) => (
-          <option key={o} value={o}>{o}</option>
-        ))}
-      </select>
-    </div>
-  );
 
   return (
     // Modal backdrop
@@ -127,21 +142,21 @@ export default function EmployeeForm({ employee = null, onClose, onSaved }) {
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Employee Number" name="employee_number" required />
-            <Field label="First Name" name="first_name" required />
-            <Field label="Last Name" name="last_name" required />
-            <Field label="Age" name="age" type="number" min="18" max="65" required />
-            <Select label="Gender" name="gender" options={['Male', 'Female']} />
-            <Select label="Department" name="department" options={DEPARTMENTS} />
-            <Select label="Job Role" name="job_role" options={JOB_ROLES} />
-            <Field label="Monthly Income ($)" name="monthly_income" type="number" min="0" required />
-            <Select label="Marital Status" name="marital_status" options={MARITAL} />
-            <Select label="Education (1–5)" name="education" options={EDUCATION} />
-            <Field label="Years at Company" name="years_at_company" type="number" min="0" required />
-            <Field label="Distance from Home (km)" name="distance_from_home" type="number" min="0" required />
-            <Select label="Performance Rating (1–4)" name="performance_rating" options={[1,2,3,4]} />
-            <Select label="Work-Life Balance (1–4)" name="work_life_balance" options={[1,2,3,4]} />
-            <Select label="Job Satisfaction (1–4)" name="job_satisfaction" options={[1,2,3,4]} />
+            <Field label="Employee Number" name="employee_number" value={form.employee_number} onChange={handleChange} required />
+            <Field label="First Name" name="first_name" value={form.first_name} onChange={handleChange} required />
+            <Field label="Last Name" name="last_name" value={form.last_name} onChange={handleChange} required />
+            <Field label="Age" name="age" type="number" min="18" max="65" value={form.age} onChange={handleChange} required />
+            <Select label="Gender" name="gender" value={form.gender} onChange={handleChange} options={['Male', 'Female']} />
+            <Select label="Department" name="department" value={form.department} onChange={handleChange} options={DEPARTMENTS} />
+            <Select label="Job Role" name="job_role" value={form.job_role} onChange={handleChange} options={JOB_ROLES} />
+            <Field label="Monthly Income ($)" name="monthly_income" type="number" min="0" value={form.monthly_income} onChange={handleChange} required />
+            <Select label="Marital Status" name="marital_status" value={form.marital_status} onChange={handleChange} options={MARITAL} />
+            <Select label="Education (1–5)" name="education" value={form.education} onChange={handleChange} options={EDUCATION} />
+            <Field label="Years at Company" name="years_at_company" type="number" min="0" value={form.years_at_company} onChange={handleChange} required />
+            <Field label="Distance from Home (km)" name="distance_from_home" type="number" min="0" value={form.distance_from_home} onChange={handleChange} required />
+            <Select label="Performance Rating (1–4)" name="performance_rating" value={form.performance_rating} onChange={handleChange} options={[1,2,3,4]} />
+            <Select label="Work-Life Balance (1–4)" name="work_life_balance" value={form.work_life_balance} onChange={handleChange} options={[1,2,3,4]} />
+            <Select label="Job Satisfaction (1–4)" name="job_satisfaction" value={form.job_satisfaction} onChange={handleChange} options={[1,2,3,4]} />
           </div>
 
           {/* Overtime checkbox */}

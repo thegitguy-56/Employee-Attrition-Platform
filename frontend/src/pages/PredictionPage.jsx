@@ -50,8 +50,21 @@ export default function PredictionPage() {
       const data = await predictSingle(payload);
       setResult(data);
       toast.success('Prediction complete!');
-    } catch (err) { toast.error(err.response?.data?.detail ?? 'Prediction failed'); }
-    finally { setLoading(false); }
+    } catch (err) {
+      let msg = 'Prediction failed';
+      if (err.response?.data?.detail) {
+        if (Array.isArray(err.response.data.detail)) {
+          msg = err.response.data.detail.map(e => `${e.loc.join('.')}: ${e.msg}`).join(', ');
+        } else if (typeof err.response.data.detail === 'string') {
+          msg = err.response.data.detail;
+        } else {
+          msg = JSON.stringify(err.response.data.detail);
+        }
+      }
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const runBatch = async () => {
@@ -61,24 +74,22 @@ export default function PredictionPage() {
       const data = await predictBatch(batchFile);
       setBatchR(data.results ?? data);
       toast.success(`Processed ${(data.results ?? data).length} employees`);
-    } catch (err) { toast.error(err.response?.data?.detail ?? 'Batch failed'); }
-    finally { setBL(false); }
+    } catch (err) {
+      let msg = 'Batch failed';
+      if (err.response?.data?.detail) {
+        if (Array.isArray(err.response.data.detail)) {
+          msg = err.response.data.detail.map(e => `${e.loc.join('.')}: ${e.msg}`).join(', ');
+        } else if (typeof err.response.data.detail === 'string') {
+          msg = err.response.data.detail;
+        } else {
+          msg = JSON.stringify(err.response.data.detail);
+        }
+      }
+      toast.error(msg);
+    } finally {
+      setBL(false);
+    }
   };
-
-  const F = ({ label, name, type='text', ...rest }) => (
-    <div>
-      <label className="block text-xs font-medium text-slate-600 mb-1">{label}</label>
-      <input name={name} type={type} value={form[name]} onChange={handleChange} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" {...rest} />
-    </div>
-  );
-  const S = ({ label, name, opts }) => (
-    <div>
-      <label className="block text-xs font-medium text-slate-600 mb-1">{label}</label>
-      <select name={name} value={form[name]} onChange={handleChange} className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-        {opts.map(o => <option key={o} value={o}>{o}</option>)}
-      </select>
-    </div>
-  );
 
   return (
     <div className="space-y-5">
@@ -108,23 +119,23 @@ export default function PredictionPage() {
 
             <form onSubmit={runPrediction} className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
-                <F label="Age" name="age" type="number" min="18" max="65" />
-                <S label="Gender" name="gender" opts={['Male','Female']} />
-                <S label="Department" name="department" opts={['Sales','Research & Development','Human Resources']} />
-                <S label="Job Role" name="job_role" opts={['Sales Executive','Research Scientist','Laboratory Technician','Manufacturing Director','Healthcare Representative','Manager','Sales Representative','Research Director','Human Resources']} />
-                <F label="Monthly Income" name="monthly_income" type="number" />
-                <F label="Years at Company" name="years_at_company" type="number" />
-                <F label="Total Working Years" name="total_working_years" type="number" />
-                <F label="Distance from Home" name="distance_from_home" type="number" />
-                <S label="Job Satisfaction (1-4)" name="job_satisfaction" opts={[1,2,3,4]} />
-                <S label="Work-Life Balance (1-4)" name="work_life_balance" opts={[1,2,3,4]} />
-                <S label="Performance Rating (1-4)" name="performance_rating" opts={[1,2,3,4]} />
-                <S label="Education (1-5)" name="education" opts={[1,2,3,4,5]} />
-                <F label="Num Companies Worked" name="num_companies_worked" type="number" />
-                <F label="Yrs Since Last Promotion" name="years_since_last_promotion" type="number" />
-                <F label="Yrs With Curr Manager" name="years_with_curr_manager" type="number" />
-                <F label="Training Times Last Yr" name="training_times_last_year" type="number" />
-                <S label="Marital Status" name="marital_status" opts={['Single','Married','Divorced']} />
+                <F label="Age" name="age" type="number" min="18" max="65" value={form.age} onChange={handleChange} />
+                <S label="Gender" name="gender" value={form.gender} onChange={handleChange} opts={['Male','Female']} />
+                <S label="Department" name="department" value={form.department} onChange={handleChange} opts={['Sales','Research & Development','Human Resources']} />
+                <S label="Job Role" name="job_role" value={form.job_role} onChange={handleChange} opts={['Sales Executive','Research Scientist','Laboratory Technician','Manufacturing Director','Healthcare Representative','Manager','Sales Representative','Research Director','Human Resources']} />
+                <F label="Monthly Income" name="monthly_income" type="number" value={form.monthly_income} onChange={handleChange} />
+                <F label="Years at Company" name="years_at_company" type="number" value={form.years_at_company} onChange={handleChange} />
+                <F label="Total Working Years" name="total_working_years" type="number" value={form.total_working_years} onChange={handleChange} />
+                <F label="Distance from Home" name="distance_from_home" type="number" value={form.distance_from_home} onChange={handleChange} />
+                <S label="Job Satisfaction (1-4)" name="job_satisfaction" value={form.job_satisfaction} onChange={handleChange} opts={[1,2,3,4]} />
+                <S label="Work-Life Balance (1-4)" name="work_life_balance" value={form.work_life_balance} onChange={handleChange} opts={[1,2,3,4]} />
+                <S label="Performance Rating (1-4)" name="performance_rating" value={form.performance_rating} onChange={handleChange} opts={[1,2,3,4]} />
+                <S label="Education (1-5)" name="education" value={form.education} onChange={handleChange} opts={[1,2,3,4,5]} />
+                <F label="Num Companies Worked" name="num_companies_worked" type="number" value={form.num_companies_worked} onChange={handleChange} />
+                <F label="Yrs Since Last Promotion" name="years_since_last_promotion" type="number" value={form.years_since_last_promotion} onChange={handleChange} />
+                <F label="Yrs With Curr Manager" name="years_with_curr_manager" type="number" value={form.years_with_curr_manager} onChange={handleChange} />
+                <F label="Training Times Last Yr" name="training_times_last_year" type="number" value={form.training_times_last_year} onChange={handleChange} />
+                <S label="Marital Status" name="marital_status" value={form.marital_status} onChange={handleChange} opts={['Single','Married','Divorced']} />
               </div>
               <div className="flex items-center gap-2">
                 <input type="checkbox" name="overtime" id="ot" checked={form.overtime} onChange={handleChange} className="w-4 h-4 text-blue-600" />
@@ -247,3 +258,34 @@ export default function PredictionPage() {
     </div>
   );
 }
+
+// Reusable form helpers (moved outside main component function to prevent focus loss)
+const F = ({ label, name, type = 'text', value, onChange, ...rest }) => (
+  <div>
+    <label className="block text-xs font-medium text-slate-600 mb-1">{label}</label>
+    <input
+      name={name}
+      type={type}
+      value={value}
+      onChange={onChange}
+      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      {...rest}
+    />
+  </div>
+);
+
+const S = ({ label, name, value, onChange, opts }) => (
+  <div>
+    <label className="block text-xs font-medium text-slate-600 mb-1">{label}</label>
+    <select
+      name={name}
+      value={value}
+      onChange={onChange}
+      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      {opts.map(o => (
+        <option key={o} value={o}>{o}</option>
+      ))}
+    </select>
+  </div>
+);
