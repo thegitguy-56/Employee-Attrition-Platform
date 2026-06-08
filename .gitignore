@@ -69,7 +69,6 @@ backend/app/ml/models/*.pkl
 # ─────────────────────────────────────────────────────────────
 # DATASET FILES — large CSV/Excel files
 # ─────────────────────────────────────────────────────────────
-ml_pipeline/data/*.csv
 ml_pipeline/data/*.xlsx
 ml_pipeline/data/*.zip
 

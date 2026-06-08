@@ -10,7 +10,7 @@ pandas==2.2.3
 numpy==2.2.6
 
 # scikit-learn gives you all 3 ML algorithms + evaluation tools
-scikit-learn==1.7.0
+scikit-learn==1.6.1
 
 # joblib saves your trained model to a .pkl file
 joblib==1.4.2
