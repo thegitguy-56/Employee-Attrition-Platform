@@ -184,9 +184,27 @@ async def root():
     }
 
 
-# ── Global Error Handler ───────────────────────────────────────────────────────
-# This catches any unhandled exceptions and returns a clean JSON response
-# instead of a cryptic Python traceback.
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
+# ── Global Error Handlers ──────────────────────────────────────────────────────
+# These ensure standard HTTP exceptions and request validation errors keep their
+# correct status codes, while unexpected server exceptions default to 500.
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail}
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=422,
+        content={"detail": exc.errors()}
+    )
+
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc):
     logger.error(f"Unhandled exception: {exc}", exc_info=True)
@@ -197,3 +215,4 @@ async def global_exception_handler(request, exc):
             "type": type(exc).__name__
         }
     )
+

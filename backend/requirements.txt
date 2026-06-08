@@ -7,7 +7,7 @@ uvicorn[standard]==0.29.0
 
 # === DATABASE ===
 # SQLAlchemy lets Python talk to your PostgreSQL database
-sqlalchemy==2.0.41
+sqlalchemy==2.0.36
 
 # asyncpg is the driver that connects SQLAlchemy to PostgreSQL
 asyncpg==0.30.0
@@ -40,12 +40,15 @@ email-validator==2.1.1
 
 # === MACHINE LEARNING ===
 # scikit-learn provides Logistic Regression, Decision Tree, Random Forest
-scikit-learn==1.7.0
+scikit-learn==1.6.1
+
+# scipy is a required dependency of scikit-learn — pinned to a version with pre-built wheels
+scipy==1.15.3
 
 # pandas handles tabular data (like your CSV dataset)
 pandas==2.2.3
 
-# numpy provides math operations used by ML models
+# numpy provides math operations used by ML models — pinned to match .venv
 numpy==2.2.6
 
 # joblib saves (serializes) your trained ML models to .pkl files

@@ -10,6 +10,8 @@
 #   This way, the code is safe to share on GitHub — the secrets stay local.
 # ─────────────────────────────────────────────────────────────────────────────
 
+import os
+
 from pydantic_settings import BaseSettings  # Pydantic v2 way to read .env files
 from functools import lru_cache             # Caches the settings so we only read .env once
 
@@ -56,7 +58,7 @@ class Settings(BaseSettings):
     ADMIN_NAME: str = "System Administrator"
 
     class Config:
-        env_file = "backend/.env"          # Tell Pydantic to look for a .env file
+        env_file = os.path.join(os.path.dirname(__file__), "..", ".env")          # Tell Pydantic to look for a .env file
         env_file_encoding = "utf-8"
         case_sensitive = True      # DATABASE_URL and database_url are different
 

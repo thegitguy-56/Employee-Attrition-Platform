@@ -44,7 +44,7 @@ class EmployeeBase(BaseModel):
     job_involvement: Optional[int] = 3
     performance_rating: int = 3
     training_times_last_year: Optional[int] = None
-    employee_number: Optional[int] = None
+    employee_number: Optional[str] = None
 
     @field_validator("age")
     @classmethod

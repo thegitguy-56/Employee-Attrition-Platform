@@ -25,8 +25,8 @@ class Employee(Base):
     id = Column(Integer, primary_key=True, index=True)
     # Internal auto-ID used by the database
 
-    employee_number = Column(Integer, unique=True, nullable=True)
-    # The employee's company ID number (like a badge number)
+    employee_number = Column(String(100), unique=True, nullable=True)
+    # The employee's company ID string (like a badge number, e.g. EMP-001)
 
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)

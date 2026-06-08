@@ -84,11 +84,17 @@ class PredictionResponse(BaseModel):
     overall_risk_score: float    # Average of all model scores
     risk_level: str              # "Low" (<40%), "Medium" (40-70%), "High" (>70%)
     
+    # Frontend compatibility fields
+    ensemble_prediction: Optional[str] = None
+    ensemble_risk_score: Optional[float] = None
+    
     # Individual model results
     model_results: List[ModelResult]
+    models: Optional[List[ModelResult]] = None  # Frontend compatibility alias
     
     # Why this prediction was made
     key_risk_factors: List[RiskFactor]
+    key_factors: Optional[List[str]] = None     # Frontend compatibility alias (list of strings)
     
     # AI-generated HR recommendation text
     recommendation: str
@@ -104,6 +110,7 @@ class BatchPredictionRow(BaseModel):
     row_number: int
     employee_name: Optional[str] = None
     overall_prediction: str
+    attrition_prediction: Optional[str] = None # Frontend compatibility field
     risk_score: float
     risk_level: str
     recommendation: str

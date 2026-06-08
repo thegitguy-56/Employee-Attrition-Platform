@@ -15,6 +15,39 @@ from app.services.employee_service import get_employee_by_id
 
 router = APIRouter()
 
+@router.post("/debug-single")
+def debug_predict_single(request: dict, db: Session = Depends(get_db), _: User = Depends(get_current_user)):
+    """Temporary debug endpoint — returns full traceback on error."""
+    import traceback as tb
+    from app.services.employee_service import get_employee_by_id
+    emp_id = request.get("employee_id")
+    emp = get_employee_by_id(db, emp_id)
+    employee_data = {
+        "age": emp.age, "gender": emp.gender, "marital_status": emp.marital_status,
+        "education": emp.education, "distance_from_home": emp.distance_from_home,
+        "department": emp.department, "job_role": emp.job_role, "job_level": emp.job_level,
+        "monthly_income": emp.monthly_income, "overtime": emp.overtime,
+        "business_travel": emp.business_travel, "job_satisfaction": emp.job_satisfaction,
+        "environment_satisfaction": emp.environment_satisfaction,
+        "relationship_satisfaction": emp.relationship_satisfaction,
+        "work_life_balance": emp.work_life_balance, "job_involvement": emp.job_involvement,
+        "performance_rating": emp.performance_rating,
+        "num_companies_worked": emp.num_companies_worked,
+        "total_working_years": emp.total_working_years,
+        "years_at_company": emp.years_at_company,
+        "years_in_current_role": emp.years_in_current_role,
+        "years_since_last_promotion": emp.years_since_last_promotion,
+        "years_with_curr_manager": emp.years_with_curr_manager,
+        "training_times_last_year": emp.training_times_last_year,
+        "percent_salary_hike": emp.percent_salary_hike,
+    }
+    try:
+        result = ml_service.predict_single(employee_data, "all")
+        return {"status": "ok", "risk_score": result["overall_risk_score"], "risk_level": result["risk_level"]}
+    except Exception as e:
+        return {"status": "error", "type": type(e).__name__, "msg": str(e), "traceback": tb.format_exc(), "employee_data": employee_data}
+
+
 @router.post("/single", response_model=PredictionResponse)
 def predict_single(
     request: PredictionRequest,
@@ -83,6 +116,10 @@ def predict_single(
         recommendation=result["recommendation"],
         prediction_id=pred_record.id,
         created_at=pred_record.created_at,
+        ensemble_prediction=result["overall_prediction"],
+        ensemble_risk_score=result["overall_risk_score"],
+        models=result["model_results"],
+        key_factors=[f["description"] for f in result["key_risk_factors"]],
     )
 
 
@@ -112,8 +149,10 @@ async def predict_batch(
     batch_id = str(uuid.uuid4())[:8]
 
     # Save all results to history
+    formatted_results = []
     for r in results:
         if r.get("error"):
+            formatted_results.append(r)
             continue
         db.add(Prediction(
             employee_name=r["employee_name"],
@@ -126,6 +165,9 @@ async def predict_batch(
             is_batch=True,
             batch_id=batch_id,
         ))
+        r_copy = dict(r)
+        r_copy["attrition_prediction"] = r["overall_prediction"]
+        formatted_results.append(r_copy)
     db.commit()
 
     high   = sum(1 for r in results if r["risk_level"] == "High")
@@ -137,7 +179,7 @@ async def predict_batch(
         high_risk_count=high,
         medium_risk_count=medium,
         low_risk_count=low,
-        results=results,
+        results=formatted_results,
         batch_id=batch_id,
     )
 

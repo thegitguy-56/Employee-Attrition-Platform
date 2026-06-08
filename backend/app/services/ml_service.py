@@ -63,8 +63,11 @@ def _preprocess_employee(emp: Dict[str, Any]) -> np.ndarray:
         "WorkLifeBalance":3,"YearsAtCompany":5,"YearsInCurrentRole":3,
         "YearsSinceLastPromotion":1,"YearsWithCurrManager":3,"Department":"Research & Development",
     }
-    row = {dataset_key: emp.get(api_key, defaults.get(dataset_key, 0))
-           for api_key, dataset_key in field_map.items()}
+    # Build row: if the value is None (key present but null), fall back to the default
+    row = {}
+    for api_key, dataset_key in field_map.items():
+        v = emp.get(api_key)
+        row[dataset_key] = v if v is not None else defaults.get(dataset_key, 0)
     df = pd.DataFrame([row])
     cat_cols = ["BusinessTravel","Department","EducationField","Gender","JobRole","MaritalStatus","OverTime"]
     if _label_encoders:
@@ -77,6 +80,8 @@ def _preprocess_employee(emp: Dict[str, Any]) -> np.ndarray:
     for c in _feature_columns:
         if c not in df.columns:
             df[c] = 0
+    # Safety net: replace any remaining NaN with 0 before passing to sklearn
+    df.fillna(0, inplace=True)
     return _scaler.transform(df[_feature_columns])
 
 
@@ -86,39 +91,39 @@ def _confidence(s): d=abs(s-0.5); return "High" if d>=0.3 else ("Medium" if d>=0
 
 def generate_recommendation(risk_score: float, emp: Dict) -> str:
     tips = []
-    if str(emp.get("overtime","No")).lower()=="yes":  tips.append("High overtime — review workload.")
-    if int(emp.get("job_satisfaction",3))<=2:          tips.append("Low job satisfaction — schedule 1-on-1.")
-    if int(emp.get("work_life_balance",3))<=2:         tips.append("Poor work-life balance — consider flexible hours.")
-    if float(emp.get("monthly_income",5000))<3000:     tips.append("Below-average pay — review compensation.")
-    if int(emp.get("years_since_last_promotion",0))>=4:tips.append("No promotion in 4+ years — discuss career growth.")
-    pct = risk_score*100
+    if str(emp.get("overtime", "No") or "No").lower() == "yes":         tips.append("High overtime — review workload.")
+    if int(emp.get("job_satisfaction", 3) or 3) <= 2:                   tips.append("Low job satisfaction — schedule 1-on-1.")
+    if int(emp.get("work_life_balance", 3) or 3) <= 2:                  tips.append("Poor work-life balance — consider flexible hours.")
+    if float(emp.get("monthly_income", 5000) or 5000) < 3000:          tips.append("Below-average pay — review compensation.")
+    if int(emp.get("years_since_last_promotion", 0) or 0) >= 4:        tips.append("No promotion in 4+ years — discuss career growth.")
+    pct = risk_score * 100
     prefix = f"Risk: {pct:.1f}% — "
     if tips: return prefix + " | ".join(tips)
-    if pct>=70: return prefix+"High risk. Schedule immediate retention conversation."
-    if pct>=40: return prefix+"Moderate risk. Monitor engagement closely."
-    return prefix+"Low risk. Continue regular check-ins."
+    if pct >= 70: return prefix + "High risk. Schedule immediate retention conversation."
+    if pct >= 40: return prefix + "Moderate risk. Monitor engagement closely."
+    return prefix + "Low risk. Continue regular check-ins."
 
 
 def _key_factors(emp: Dict) -> List[Dict]:
-    factors=[]
-    checks=[
-        ("overtime","Yes","high","Overtime significantly raises attrition risk"),
-        ("job_satisfaction",2,"high","Low job satisfaction is a strong predictor"),
-        ("work_life_balance",2,"high","Poor work-life balance leads to burnout"),
-        ("environment_satisfaction",2,"medium","Low environment satisfaction"),
-        ("years_since_last_promotion",4,"medium","No recent promotion"),
-        ("monthly_income",3000,"high","Below-average compensation"),
-        ("distance_from_home",25,"low","Long commute"),
+    factors = []
+    checks = [
+        ("overtime", "Yes", "high", "Overtime significantly raises attrition risk"),
+        ("job_satisfaction", 2, "high", "Low job satisfaction is a strong predictor"),
+        ("work_life_balance", 2, "high", "Poor work-life balance leads to burnout"),
+        ("environment_satisfaction", 2, "medium", "Low environment satisfaction"),
+        ("years_since_last_promotion", 4, "medium", "No recent promotion"),
+        ("monthly_income", 3000, "high", "Below-average compensation"),
+        ("distance_from_home", 25, "low", "Long commute"),
     ]
-    for field,threshold,impact,desc in checks:
+    for field, threshold, impact, desc in checks:
         v = emp.get(field)
         if v is None: continue
-        if field=="overtime" and str(v).lower()=="yes": pass
-        elif field in ["job_satisfaction","work_life_balance","environment_satisfaction"] and int(v)>threshold: continue
-        elif field=="years_since_last_promotion" and int(v)<threshold: continue
-        elif field=="monthly_income" and float(v)>=threshold: continue
-        elif field=="distance_from_home" and int(v)<threshold: continue
-        factors.append({"factor":field.replace("_"," ").title(),"value":v,"impact":impact,"description":desc})
+        if field == "overtime" and str(v).lower() == "yes": pass
+        elif field in ["job_satisfaction", "work_life_balance", "environment_satisfaction"] and int(v or 0) > threshold: continue
+        elif field == "years_since_last_promotion" and int(v or 0) < threshold: continue
+        elif field == "monthly_income" and float(v or 0) >= threshold: continue
+        elif field == "distance_from_home" and int(v or 0) < threshold: continue
+        factors.append({"factor": field.replace("_", " ").title(), "value": v, "impact": impact, "description": desc})
     return factors[:5]
 
 
