@@ -1,0 +1,247 @@
+{
+  "top_10": [
+    {
+      "rank": 1,
+      "feature": "MonthlyIncome",
+      "importance": 0.087612,
+      "percentage": 8.76
+    },
+    {
+      "rank": 2,
+      "feature": "Age",
+      "importance": 0.071727,
+      "percentage": 7.17
+    },
+    {
+      "rank": 3,
+      "feature": "TotalWorkingYears",
+      "importance": 0.06373,
+      "percentage": 6.37
+    },
+    {
+      "rank": 4,
+      "feature": "OverTime",
+      "importance": 0.062254,
+      "percentage": 6.23
+    },
+    {
+      "rank": 5,
+      "feature": "YearsAtCompany",
+      "importance": 0.055451,
+      "percentage": 5.55
+    },
+    {
+      "rank": 6,
+      "feature": "DailyRate",
+      "importance": 0.046816,
+      "percentage": 4.68
+    },
+    {
+      "rank": 7,
+      "feature": "YearsWithCurrManager",
+      "importance": 0.045373,
+      "percentage": 4.54
+    },
+    {
+      "rank": 8,
+      "feature": "DistanceFromHome",
+      "importance": 0.043904,
+      "percentage": 4.39
+    },
+    {
+      "rank": 9,
+      "feature": "HourlyRate",
+      "importance": 0.042261,
+      "percentage": 4.23
+    },
+    {
+      "rank": 10,
+      "feature": "StockOptionLevel",
+      "importance": 0.040969,
+      "percentage": 4.1
+    }
+  ],
+  "all_features": [
+    {
+      "rank": 1,
+      "feature": "MonthlyIncome",
+      "importance": 0.087612,
+      "percentage": 8.76
+    },
+    {
+      "rank": 2,
+      "feature": "Age",
+      "importance": 0.071727,
+      "percentage": 7.17
+    },
+    {
+      "rank": 3,
+      "feature": "TotalWorkingYears",
+      "importance": 0.06373,
+      "percentage": 6.37
+    },
+    {
+      "rank": 4,
+      "feature": "OverTime",
+      "importance": 0.062254,
+      "percentage": 6.23
+    },
+    {
+      "rank": 5,
+      "feature": "YearsAtCompany",
+      "importance": 0.055451,
+      "percentage": 5.55
+    },
+    {
+      "rank": 6,
+      "feature": "DailyRate",
+      "importance": 0.046816,
+      "percentage": 4.68
+    },
+    {
+      "rank": 7,
+      "feature": "YearsWithCurrManager",
+      "importance": 0.045373,
+      "percentage": 4.54
+    },
+    {
+      "rank": 8,
+      "feature": "DistanceFromHome",
+      "importance": 0.043904,
+      "percentage": 4.39
+    },
+    {
+      "rank": 9,
+      "feature": "HourlyRate",
+      "importance": 0.042261,
+      "percentage": 4.23
+    },
+    {
+      "rank": 10,
+      "feature": "StockOptionLevel",
+      "importance": 0.040969,
+      "percentage": 4.1
+    },
+    {
+      "rank": 11,
+      "feature": "MonthlyRate",
+      "importance": 0.039904,
+      "percentage": 3.99
+    },
+    {
+      "rank": 12,
+      "feature": "JobRole",
+      "importance": 0.038147,
+      "percentage": 3.81
+    },
+    {
+      "rank": 13,
+      "feature": "NumCompaniesWorked",
+      "importance": 0.037241,
+      "percentage": 3.72
+    },
+    {
+      "rank": 14,
+      "feature": "EnvironmentSatisfaction",
+      "importance": 0.033251,
+      "percentage": 3.33
+    },
+    {
+      "rank": 15,
+      "feature": "YearsInCurrentRole",
+      "importance": 0.032738,
+      "percentage": 3.27
+    },
+    {
+      "rank": 16,
+      "feature": "PercentSalaryHike",
+      "importance": 0.029331,
+      "percentage": 2.93
+    },
+    {
+      "rank": 17,
+      "feature": "JobSatisfaction",
+      "importance": 0.025666,
+      "percentage": 2.57
+    },
+    {
+      "rank": 18,
+      "feature": "MaritalStatus",
+      "importance": 0.023401,
+      "percentage": 2.34
+    },
+    {
+      "rank": 19,
+      "feature": "JobLevel",
+      "importance": 0.023033,
+      "percentage": 2.3
+    },
+    {
+      "rank": 20,
+      "feature": "YearsSinceLastPromotion",
+      "importance": 0.021571,
+      "percentage": 2.16
+    },
+    {
+      "rank": 21,
+      "feature": "RelationshipSatisfaction",
+      "importance": 0.020337,
+      "percentage": 2.03
+    },
+    {
+      "rank": 22,
+      "feature": "WorkLifeBalance",
+      "importance": 0.019722,
+      "percentage": 1.97
+    },
+    {
+      "rank": 23,
+      "feature": "JobInvolvement",
+      "importance": 0.017056,
+      "percentage": 1.71
+    },
+    {
+      "rank": 24,
+      "feature": "TrainingTimesLastYear",
+      "importance": 0.015521,
+      "percentage": 1.55
+    },
+    {
+      "rank": 25,
+      "feature": "Education",
+      "importance": 0.015022,
+      "percentage": 1.5
+    },
+    {
+      "rank": 26,
+      "feature": "EducationField",
+      "importance": 0.014311,
+      "percentage": 1.43
+    },
+    {
+      "rank": 27,
+      "feature": "Department",
+      "importance": 0.012498,
+      "percentage": 1.25
+    },
+    {
+      "rank": 28,
+      "feature": "BusinessTravel",
+      "importance": 0.010476,
+      "percentage": 1.05
+    },
+    {
+      "rank": 29,
+      "feature": "Gender",
+      "importance": 0.007918,
+      "percentage": 0.79
+    },
+    {
+      "rank": 30,
+      "feature": "PerformanceRating",
+      "importance": 0.002759,
+      "percentage": 0.28
+    }
+  ],
+  "note": "Extracted from Random Forest model. Higher = more influential."
+}
