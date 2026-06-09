@@ -30,12 +30,23 @@ settings = get_settings()
 # connect_args={"check_same_thread": False} is needed for PostgreSQL async safety.
 # pool_pre_ping=True checks if the connection is alive before using it
 # (important for cloud databases like Neon which may disconnect after idle time).
+is_sqlite = settings.DATABASE_URL.startswith("sqlite")
+connect_args = {"check_same_thread": False} if is_sqlite else {}
+
+engine_args = {
+    "echo": settings.DEBUG,
+}
+
+if is_sqlite:
+    engine_args["connect_args"] = connect_args
+else:
+    engine_args["pool_pre_ping"] = True
+    engine_args["pool_size"] = 10
+    engine_args["max_overflow"] = 20
+
 engine = create_engine(
     settings.DATABASE_URL,
-    pool_pre_ping=True,
-    pool_size=10,          # Keep up to 10 connections ready
-    max_overflow=20,       # Allow 20 extra connections if busy
-    echo=settings.DEBUG,   # Print all SQL queries to terminal (helpful for debugging)
+    **engine_args
 )
 
 # ── Create the Session Factory ────────────────────────────────────────────────
