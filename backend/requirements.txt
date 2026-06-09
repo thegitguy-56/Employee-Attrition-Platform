@@ -24,6 +24,7 @@ python-jose[cryptography]==3.3.0
 
 # passlib handles password hashing — NEVER store plain passwords
 passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
 
 # python-multipart lets FastAPI receive form data (like login forms)
 python-multipart==0.0.9
