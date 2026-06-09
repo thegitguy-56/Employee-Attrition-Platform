@@ -87,7 +87,8 @@ def require_admin(current_user: User = Depends(get_current_user)) -> User:
         def create_user(current_user: User = Depends(require_admin)):
             ...
     """
-    if current_user.role.value != "admin":
+    role_val = current_user.role.value if hasattr(current_user.role, "value") else str(current_user.role)
+    if role_val != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin access required for this action."
