@@ -97,7 +97,7 @@ export default function PredictionPage() {
       <div className="flex gap-2 border-b border-slate-200">
         {['single','batch'].map(t => (
           <button key={t} onClick={() => setTab(t)} className={`px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px ${tab===t ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}>
-            {t === 'single' ? '🔮 Single Prediction' : '📁 Batch Prediction'}
+            {t === 'single' ? 'Single Prediction' : '📁 Batch Prediction'}
           </button>
         ))}
       </div>
@@ -192,7 +192,7 @@ export default function PredictionPage() {
                 {/* Key risk factors */}
                 {result.key_factors?.length > 0 && (
                   <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-                    <h3 className="font-semibold text-slate-700 mb-3">🔑 Key Risk Factors</h3>
+                    <h3 className="font-semibold text-slate-700 mb-3">Key Risk Factors</h3>
                     <ul className="space-y-1.5">
                       {result.key_factors.map((f, i) => (
                         <li key={i} className="flex items-center gap-2 text-sm text-slate-600">
@@ -206,7 +206,7 @@ export default function PredictionPage() {
                 {/* AI recommendation */}
                 {result.recommendation && (
                   <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
-                    <h3 className="font-semibold text-blue-800 mb-2">💡 HR Recommendation</h3>
+                    <h3 className="font-semibold text-blue-800 mb-2">HR Recommendation</h3>
                     <p className="text-sm text-blue-700 leading-relaxed">{result.recommendation}</p>
                   </div>
                 )}

@@ -33,25 +33,25 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Section title="📊 Average Risk Score by Department">
+        <Section title="Average Risk Score by Department">
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={dept}><XAxis dataKey="department" tick={{fontSize:11}} /><YAxis tick={{fontSize:11}} /><Tooltip formatter={v=>[`${v}%`,'Risk']} /><Bar dataKey="avg_risk_score" fill="#3b82f6" radius={[4,4,0,0]} /></BarChart>
           </ResponsiveContainer>
         </Section>
 
-        <Section title="😊 Job Satisfaction vs Attrition Risk">
+        <Section title="Job Satisfaction vs Attrition Risk">
           <ResponsiveContainer width="100%" height={240}>
             <LineChart data={sat}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="satisfaction" tick={{fontSize:11}} label={{value:'Satisfaction Level',position:'insideBottom',offset:-2,fontSize:11}} /><YAxis tick={{fontSize:11}} /><Tooltip formatter={v=>[`${v}%`,'Risk']} /><Line type="monotone" dataKey="avg_risk_score" stroke="#ef4444" strokeWidth={2} dot={{ r:4 }} /></LineChart>
           </ResponsiveContainer>
         </Section>
 
-        <Section title="💰 Salary: High-Risk vs Low-Risk Employees">
+        <Section title="Salary: High-Risk vs Low-Risk Employees">
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={salary}><XAxis dataKey="department" tick={{fontSize:10}} /><YAxis tick={{fontSize:11}} /><Tooltip formatter={v=>[`$${v?.toLocaleString()}`,'Avg Income']} /><Legend /><Bar dataKey="high_risk_income" name="High Risk" fill="#ef4444" radius={[4,4,0,0]} /><Bar dataKey="low_risk_income" name="Low Risk" fill="#22c55e" radius={[4,4,0,0]} /></BarChart>
           </ResponsiveContainer>
         </Section>
 
-        <Section title="🔑 Top Feature Importances">
+        <Section title="Top Feature Importances">
           <div className="space-y-2">
             {(fi.slice ? fi.slice(0,10) : []).map((f, i) => (
               <div key={i} className="flex items-center gap-3">

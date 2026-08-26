@@ -102,7 +102,7 @@ export default function SettingsPage() {
       </Section>
 
       {/* ── Change Password ── */}
-      <Section title="🔑 Change Password">
+      <Section title="Change Password">
         <form onSubmit={changePassword} className="space-y-3">
           <Input label="Current Password" type="password" value={oldPw} onChange={e => setOld(e.target.value)} required />
           <Input label="New Password (min 6 chars)" type="password" value={newPw} onChange={e => setNew(e.target.value)} required minLength={6} />
@@ -114,13 +114,13 @@ export default function SettingsPage() {
       </Section>
 
       {/* ── Prediction Settings ── */}
-      <Section title="⚙️ Prediction Settings">
+      <Section title="Prediction Settings">
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1">Default ML Model</label>
             <select value={model} onChange={e => setModel(e.target.value)}
               className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="random_forest">Random Forest — Most accurate ✅ (recommended)</option>
+              <option value="random_forest">Random Forest — Most accurate (recommended)</option>
               <option value="decision_tree">Decision Tree — Easiest to explain</option>
               <option value="logistic_regression">Logistic Regression — Fastest</option>
             </select>

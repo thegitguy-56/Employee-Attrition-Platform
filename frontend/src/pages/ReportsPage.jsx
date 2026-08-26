@@ -165,7 +165,7 @@ export default function ReportsPage() {
                 disabled={loading[r.id]}
                 className="px-3 py-1.5 text-xs border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-50"
               >
-                {loading[r.id] ? '⏳ Loading...' : '👁 Preview'}
+                {loading[r.id] ? 'Loading...' : 'Preview'}
               </button>
               {previews[r.id] && (
                 <>
