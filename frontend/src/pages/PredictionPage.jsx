@@ -46,7 +46,7 @@ export default function PredictionPage() {
     setLoading(true);
     setResult(null);
     try {
-      const payload = { ...form, age: +form.age, monthly_income: +form.monthly_income, years_at_company: +form.years_at_company, distance_from_home: +form.distance_from_home, performance_rating: +form.performance_rating, work_life_balance: +form.work_life_balance, job_satisfaction: +form.job_satisfaction, education: +form.education, num_companies_worked: +form.num_companies_worked, total_working_years: +form.total_working_years, training_times_last_year: +form.training_times_last_year, years_since_last_promotion: +form.years_since_last_promotion, years_with_curr_manager: +form.years_with_curr_manager };
+      const payload = { ...form, age: +form.age, monthly_income: +form.monthly_income, years_at_company: +form.years_at_company, distance_from_home: +form.distance_from_home, performance_rating: +form.performance_rating, work_life_balance: +form.work_life_balance, job_satisfaction: +form.job_satisfaction, education: +form.education, num_companies_worked: +form.num_companies_worked, total_working_years: +form.total_working_years, training_times_last_year: +form.training_times_last_year, years_since_last_promotion: +form.years_since_last_promotion, years_with_curr_manager: +form.years_with_curr_manager, overtime: form.overtime ? 'Yes' : 'No' };
       const data = await predictSingle(payload);
       setResult(data);
       toast.success('Prediction complete!');
