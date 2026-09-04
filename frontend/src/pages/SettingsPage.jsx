@@ -83,39 +83,44 @@ export default function SettingsPage() {
   );
 
   return (
-    <div className="max-w-2xl space-y-5">
+    <div className="space-y-5">
 
-      {/* ── Profile ── */}
-      <Section title="👤 Profile">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold uppercase">
-            {user?.full_name?.[0] ?? 'U'}
+      {/* ── Top 2-column grid ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+        {/* ── Profile ── */}
+        <Section title="👤 Profile">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold uppercase flex-shrink-0">
+              {user?.full_name?.[0] ?? 'U'}
+            </div>
+            <div>
+              <p className="font-semibold text-slate-800">{user?.full_name}</p>
+              <p className="text-sm text-slate-500">{user?.email}</p>
+              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full capitalize mt-1 inline-block">
+                {user?.role?.replace('_', ' ')}
+              </span>
+            </div>
           </div>
-          <div>
-            <p className="font-semibold text-slate-800">{user?.full_name}</p>
-            <p className="text-sm text-slate-500">{user?.email}</p>
-            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full capitalize mt-1 inline-block">
-              {user?.role?.replace('_', ' ')}
-            </span>
-          </div>
-        </div>
-      </Section>
+        </Section>
 
-      {/* ── Change Password ── */}
-      <Section title="Change Password">
-        <form onSubmit={changePassword} className="space-y-3">
-          <Input label="Current Password" type="password" value={oldPw} onChange={e => setOld(e.target.value)} required />
-          <Input label="New Password (min 6 chars)" type="password" value={newPw} onChange={e => setNew(e.target.value)} required minLength={6} />
-          <button type="submit" disabled={saving}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-lg text-sm transition-colors">
-            {saving ? 'Saving...' : 'Update Password'}
-          </button>
-        </form>
-      </Section>
+        {/* ── Change Password ── */}
+        <Section title="🔑 Change Password">
+          <form onSubmit={changePassword} className="space-y-3">
+            <Input label="Current Password" type="password" value={oldPw} onChange={e => setOld(e.target.value)} required />
+            <Input label="New Password (min 6 chars)" type="password" value={newPw} onChange={e => setNew(e.target.value)} required minLength={6} />
+            <button type="submit" disabled={saving}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-lg text-sm transition-colors">
+              {saving ? 'Saving...' : 'Update Password'}
+            </button>
+          </form>
+        </Section>
 
-      {/* ── Prediction Settings ── */}
-      <Section title="Prediction Settings">
-        <div className="space-y-4">
+      </div>
+
+      {/* ── Prediction Settings — full width ── */}
+      <Section title="⚙️ Prediction Settings">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1">Default ML Model</label>
             <select value={model} onChange={e => setModel(e.target.value)}
@@ -136,14 +141,14 @@ export default function SettingsPage() {
               <span>30% (sensitive)</span><span>90% (strict)</span>
             </div>
             <p className="text-xs text-slate-400 mt-1">
-              Employees with a risk score above {threshold}% will be flagged as "High Risk" across dashboards and reports.
+              Employees above {threshold}% will be flagged as &ldquo;High Risk&rdquo; across dashboards and reports.
             </p>
           </div>
-          <button onClick={() => toast.success('Preferences saved!')}
-            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg text-sm transition-colors">
-            Save Preferences
-          </button>
         </div>
+        <button onClick={() => toast.success('Preferences saved!')}
+          className="mt-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg text-sm transition-colors">
+          Save Preferences
+        </button>
       </Section>
 
       {/* ── User Management (Admin only) ── */}
