@@ -52,7 +52,7 @@ export default function EmployeesPage() {
       <div className="flex flex-col sm:flex-row gap-3">
         <input
           type="text"
-          placeholder="🔍 Search by name..."
+          placeholder="Search by name..."
           value={search}
           onChange={(e) => { setSearch(e.target.value); setPage(1); }}
           className="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"

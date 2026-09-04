@@ -68,7 +68,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* High-risk employee table */}
-      <Section title="🚨 High-Risk Employees (Risk > 70%)">
+      <Section title="High-Risk Employees (Risk > 70%)">
         <div className="overflow-x-auto rounded-lg border border-slate-200">
           <table className="w-full text-sm">
             <thead className="bg-slate-50">

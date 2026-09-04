@@ -60,28 +60,28 @@ export default function DashboardPage() {
           value={overview?.total_employees?.toLocaleString()}
           subtitle="Active workforce"
           color="blue"
-          icon="👥"
+          icon="users"
         />
         <StatCard
           title="High Risk Employees"
           value={overview?.high_risk}
           subtitle="Risk score > 70%"
           color="red"
-          icon="⚠️"
+          icon="alert"
         />
         <StatCard
           title="Avg Risk Score"
           value={overview?.average_risk_score ? `${overview.average_risk_score}%` : '—'}
           subtitle="Across all employees"
           color="yellow"
-          icon="📊"
+          icon="chart"
         />
         <StatCard
           title="Predictions Today"
           value={overview?.predictions_today ?? 0}
           subtitle="Analyses run today"
           color="green"
-          icon="🔮"
+          icon="prediction"
         />
       </div>
 
@@ -123,7 +123,7 @@ export default function DashboardPage() {
       {/* ─── Row 3: Top 5 High-Risk Employees ─── */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-slate-700">🚨 Top High-Risk Employees</h2>
+          <h2 className="text-sm font-semibold text-slate-700">Top High-Risk Employees</h2>
           <a href="/employees" className="text-xs text-blue-600 hover:underline">View all →</a>
         </div>
         <div className="overflow-x-auto">

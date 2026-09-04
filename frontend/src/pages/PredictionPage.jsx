@@ -97,7 +97,7 @@ export default function PredictionPage() {
       <div className="flex gap-2 border-b border-slate-200">
         {['single','batch'].map(t => (
           <button key={t} onClick={() => setTab(t)} className={`px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px ${tab===t ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}>
-            {t === 'single' ? 'Single Prediction' : '📁 Batch Prediction'}
+            {t === 'single' ? 'Single Prediction' : 'Batch Prediction'}
           </button>
         ))}
       </div>
@@ -142,7 +142,7 @@ export default function PredictionPage() {
                 <label htmlFor="ot" className="text-sm text-slate-700">Works Overtime</label>
               </div>
               <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2.5 rounded-lg text-sm transition-colors flex items-center justify-center gap-2">
-                {loading ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>Running...</> : '🔮 Run Prediction'}
+                {loading ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>Running...</> : 'Run Prediction'}
               </button>
             </form>
           </div>
@@ -151,7 +151,7 @@ export default function PredictionPage() {
           <div className="space-y-4">
             {!result ? (
               <div className="bg-slate-50 rounded-xl border-2 border-dashed border-slate-300 p-10 text-center text-slate-400">
-                <p className="text-4xl mb-3">🔮</p>
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 mx-auto mb-3 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
                 <p className="font-medium">Fill in the form and click Run Prediction</p>
                 <p className="text-sm mt-1">Results from all 3 models will appear here</p>
               </div>
@@ -165,7 +165,7 @@ export default function PredictionPage() {
                       {Math.round((result.ensemble_risk_score ?? 0) * 100)}%
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-800">{result.ensemble_prediction === 'Yes' ? '⚠️ At Risk of Leaving' : '✅ Likely to Stay'}</p>
+                      <p className="font-semibold text-slate-800">{result.ensemble_prediction === 'Yes' ? 'At Risk of Leaving' : 'Likely to Stay'}</p>
                       <p className="text-xs text-slate-500 mt-0.5">Based on ensemble of 3 models</p>
                     </div>
                   </div>
@@ -224,14 +224,14 @@ export default function PredictionPage() {
           </div>
 
           <div className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center">
-            <p className="text-3xl mb-2">📁</p>
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 mx-auto mb-2 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
             <p className="text-sm text-slate-600 mb-3">Click to select a CSV file</p>
             <input type="file" accept=".csv" onChange={e => setBatch(e.target.files[0])} className="text-sm text-slate-600" />
-            {batchFile && <p className="mt-2 text-xs text-green-600 font-medium">✅ {batchFile.name}</p>}
+            {batchFile && <p className="mt-2 text-xs text-green-600 font-medium">Selected: {batchFile.name}</p>}
           </div>
 
           <button onClick={runBatch} disabled={batchLoading || !batchFile} className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold rounded-lg text-sm transition-colors flex items-center gap-2">
-            {batchLoading ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>Processing...</> : '🚀 Run Batch Prediction'}
+            {batchLoading ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>Processing...</> : 'Run Batch Prediction'}
           </button>
 
           {batchResults.length > 0 && (

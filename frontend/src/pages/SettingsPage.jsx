@@ -89,7 +89,7 @@ export default function SettingsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
         {/* ── Profile ── */}
-        <Section title="👤 Profile">
+        <Section title="Profile">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold uppercase flex-shrink-0">
               {user?.full_name?.[0] ?? 'U'}
@@ -105,7 +105,7 @@ export default function SettingsPage() {
         </Section>
 
         {/* ── Change Password ── */}
-        <Section title="🔑 Change Password">
+        <Section title="Change Password">
           <form onSubmit={changePassword} className="space-y-3">
             <Input label="Current Password" type="password" value={oldPw} onChange={e => setOld(e.target.value)} required />
             <Input label="New Password (min 6 chars)" type="password" value={newPw} onChange={e => setNew(e.target.value)} required minLength={6} />
@@ -119,7 +119,7 @@ export default function SettingsPage() {
       </div>
 
       {/* ── Prediction Settings — full width ── */}
-      <Section title="⚙️ Prediction Settings">
+      <Section title="Prediction Settings">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1">Default ML Model</label>
@@ -153,7 +153,7 @@ export default function SettingsPage() {
 
       {/* ── User Management (Admin only) ── */}
       {isAdmin && (
-        <Section title="👥 User Management (Admin Only)">
+        <Section title="User Management (Admin Only)">
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <p className="text-sm text-slate-500">Manage HR Manager accounts.</p>
