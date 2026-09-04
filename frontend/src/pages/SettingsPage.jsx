@@ -159,7 +159,7 @@ export default function SettingsPage() {
             </div>
 
             {/* Add user form */}
-            {showAdd && (
+            {showAddUser && (
               <form onSubmit={addUser} className="bg-slate-50 rounded-lg p-4 space-y-3 border border-slate-200">
                 <p className="text-xs font-semibold text-slate-700">New User Details</p>
                 <div className="grid grid-cols-2 gap-3">
