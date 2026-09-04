@@ -2,14 +2,12 @@
 // Shows: 4 stat cards, 2 charts (bar + pie), top-5 high-risk employee table
 
 import { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import StatCard from '../components/StatCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 import { getOverview, getByDepartment, getTopRisk } from '../api/analyticsApi';
 
-// Colors for the pie chart slices
-const RISK_COLORS = { Low: '#22c55e', Medium: '#f59e0b', High: '#ef4444' };
 
 export default function DashboardPage() {
   const [overview,    setOverview]    = useState(null);
@@ -103,21 +101,67 @@ export default function DashboardPage() {
           </ResponsiveContainer>
         </div>
 
-        {/* Pie chart — risk level distribution */}
+        {/* Donut chart — risk level distribution */}
         <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
           <h2 className="text-sm font-semibold text-slate-700 mb-4">Risk Level Distribution</h2>
-          <ResponsiveContainer width="100%" height={260}>
-            <PieChart>
-              <Pie data={pieData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} dataKey="value" label>
-                {pieData.map((entry, i) => (
-                  <Cell key={i} fill={RISK_COLORS[entry.name.split(' ')[0]]} />
-                ))}
-              </Pie>
-              <Legend />
-              <Tooltip formatter={(val) => [val, 'Employees']} />
-            </PieChart>
-          </ResponsiveContainer>
+          {(() => {
+            const total = pieData.reduce((s, d) => s + d.value, 0);
+            const COLORS = { 'Low Risk': '#22c55e', 'Medium Risk': '#f59e0b', 'High Risk': '#ef4444' };
+            return (
+              <div className="flex flex-col items-center gap-5">
+                {/* Donut with centered label */}
+                <div className="relative">
+                  <ResponsiveContainer width={220} height={220}>
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%" cy="50%"
+                        innerRadius={68} outerRadius={100}
+                        dataKey="value"
+                        strokeWidth={2}
+                        stroke="#fff"
+                        paddingAngle={pieData.filter(d => d.value > 0).length > 1 ? 3 : 0}
+                      >
+                        {pieData.map((entry, i) => (
+                          <Cell key={i} fill={COLORS[entry.name]} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        formatter={(val, name) => [`${val} employees (${total ? Math.round(val / total * 100) : 0}%)`, name]}
+                        contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #e2e8f0' }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  {/* Centered text inside donut */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className="text-3xl font-bold text-slate-800">{total}</span>
+                    <span className="text-xs text-slate-400 mt-0.5">employees</span>
+                  </div>
+                </div>
+                {/* Custom legend */}
+                <div className="w-full grid grid-cols-3 gap-2">
+                  {[
+                    { name: 'High Risk',   color: '#ef4444', bg: 'bg-red-50',    text: 'text-red-700'    },
+                    { name: 'Medium Risk', color: '#f59e0b', bg: 'bg-yellow-50', text: 'text-yellow-700' },
+                    { name: 'Low Risk',    color: '#22c55e', bg: 'bg-green-50',  text: 'text-green-700'  },
+                  ].map(({ name, bg, text }) => {
+                    const d = pieData.find(p => p.name === name);
+                    const val = d?.value ?? 0;
+                    const pct = total ? Math.round(val / total * 100) : 0;
+                    return (
+                      <div key={name} className={`${bg} rounded-lg p-2.5 text-center`}>
+                        <p className={`text-xl font-bold ${text}`}>{val}</p>
+                        <p className={`text-xs font-medium ${text} opacity-80`}>{pct}%</p>
+                        <p className="text-xs text-slate-500 mt-0.5">{name}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
         </div>
+
       </div>
 
       {/* ─── Row 3: Top 5 High-Risk Employees ─── */}
